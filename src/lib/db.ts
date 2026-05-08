@@ -8,7 +8,11 @@ import fs from "fs";
 import path from "path";
 import { randomUUID } from "crypto";
 
-const DATA_DIR = path.join(process.cwd(), "data");
+// Vercel (and most serverless platforms) have a read-only filesystem except for /tmp.
+const DATA_DIR =
+  process.env.NODE_ENV === "production"
+    ? "/tmp"
+    : path.join(process.cwd(), "data");
 const RESULTS_FILE = path.join(DATA_DIR, "results.json");
 
 export interface QuizAnswer {
@@ -28,7 +32,7 @@ export interface QuizResult {
 }
 
 function ensureDataDir(): void {
-  if (!fs.existsSync(DATA_DIR)) {
+  if (DATA_DIR !== "/tmp" && !fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
   }
 }
