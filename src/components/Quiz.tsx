@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { questions } from "@/data/questions";
+import { useState, useRef, useEffect } from "react";
+import { questions, type Question } from "@/data/questions";
 import { prepareQuestions } from "@/lib/shuffle";
 import QuizCard from "./QuizCard";
 import Summary from "./Summary";
@@ -13,13 +13,17 @@ export type AnswerRecord = {
 };
 
 export default function Quiz() {
-  const [shuffledQuestions, setShuffledQuestions] = useState(() =>
-    prepareQuestions(questions)
-  );
+  const [shuffledQuestions, setShuffledQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<AnswerRecord[]>([]);
   const [phase, setPhase] = useState<"quiz" | "summary">("quiz");
   const startTimeRef = useRef<number>(Date.now());
+
+  // Shuffle runs only on the client to avoid SSR/client hydration mismatch
+  useEffect(() => {
+    setShuffledQuestions(prepareQuestions(questions));
+    startTimeRef.current = Date.now();
+  }, []);
 
   const current = shuffledQuestions[currentIndex];
   const totalQuestions = shuffledQuestions.length;
@@ -48,7 +52,16 @@ export default function Quiz() {
     startTimeRef.current = Date.now();
   }
 
-  const currentAnswer = answers.find((a) => a.questionId === current.id);
+  const currentAnswer = answers.find((a) => a.questionId === current?.id);
+
+  // Wait for client-side shuffle before rendering
+  if (shuffledQuestions.length === 0) {
+    return (
+      <div className="w-full max-w-2xl mx-auto text-center py-20 text-slate-400">
+        Loading quiz…
+      </div>
+    );
+  }
 
   if (phase === "summary") {
     const durationSeconds = Math.round((Date.now() - startTimeRef.current) / 1000);
