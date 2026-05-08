@@ -59,8 +59,8 @@ export default function Quiz() {
     }
   }
 
-  function handleStart() {
-    setShuffledQuestions(prepareQuestions(questions));
+  function handleStart(size: number) {
+    setShuffledQuestions(prepareQuestions(questions, size));
     setCurrentIndex(0);
     setAnswers([]);
     setPhase("quiz");

@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
+import { DEFAULT_QUIZ_SIZE } from "@/lib/shuffle";
+
 const FEATURES = [
-  { icon: "🎲", label: "20 randomized questions per session" },
   { icon: "⏱️", label: "Timed — track how long you take" },
   { icon: "💡", label: "Instant explanations after each answer" },
   { icon: "⬅️", label: "Go back and review previous questions" },
@@ -10,12 +12,16 @@ const FEATURES = [
 
 const TOPICS = ["WCAG 2.2", "WAI-ARIA", "ATAG 2.0", "Testing Methodology", "Laws & Standards"];
 
+const SIZE_OPTIONS = [10, 20, 30, 50] as const;
+
 interface IntroScreenProps {
   totalInBank: number;
-  onStart: () => void;
+  onStart: (size: number) => void;
 }
 
 export default function IntroScreen({ totalInBank, onStart }: IntroScreenProps) {
+  const [quizSize, setQuizSize] = useState<number>(DEFAULT_QUIZ_SIZE);
+
   return (
     <div className="w-full max-w-2xl mx-auto">
       {/* Hero card */}
@@ -30,11 +36,11 @@ export default function IntroScreen({ totalInBank, onStart }: IntroScreenProps) 
         </h2>
         <p className="text-slate-400 text-sm mb-6 max-w-sm mx-auto leading-relaxed">
           Practice questions covering WCAG 2.2, WAI-ARIA, and the full WAS Body of Knowledge.
-          Each session draws 20 randomized questions from a bank of {totalInBank}.
+          Draws from a bank of {totalInBank} randomized questions.
         </p>
 
         {/* Topic pills */}
-        <div className="flex flex-wrap justify-center gap-2 mb-8">
+        <div className="flex flex-wrap justify-center gap-2 mb-7">
           {TOPICS.map((t) => (
             <span
               key={t}
@@ -45,13 +51,56 @@ export default function IntroScreen({ totalInBank, onStart }: IntroScreenProps) 
           ))}
         </div>
 
+        {/* Quiz length selector */}
+        <fieldset className="mb-7">
+          <legend className="text-sm font-semibold text-slate-300 mb-3">
+            Questions per session
+          </legend>
+          <div className="flex flex-wrap justify-center gap-2" role="group">
+            {SIZE_OPTIONS.map((n) => {
+              const isSelected = quizSize === n;
+              return (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setQuizSize(n)}
+                  aria-pressed={isSelected}
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 ${
+                    isSelected
+                      ? "bg-sky-500 border-sky-500 text-slate-900"
+                      : "bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600"
+                  }`}
+                >
+                  {n}
+                  {n === DEFAULT_QUIZ_SIZE && (
+                    <span className="ml-1.5 text-xs opacity-70">(default)</span>
+                  )}
+                </button>
+              );
+            })}
+            {/* "All" option */}
+            <button
+              type="button"
+              onClick={() => setQuizSize(totalInBank)}
+              aria-pressed={quizSize === totalInBank}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 ${
+                quizSize === totalInBank
+                  ? "bg-sky-500 border-sky-500 text-slate-900"
+                  : "bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600"
+              }`}
+            >
+              All ({totalInBank})
+            </button>
+          </div>
+        </fieldset>
+
         {/* Start button */}
         <button
-          onClick={onStart}
+          onClick={() => onStart(quizSize)}
           className="w-full sm:w-auto px-10 py-3.5 bg-sky-500 hover:bg-sky-400 active:bg-sky-600 text-slate-900 font-bold text-base rounded-xl transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           autoFocus
         >
-          Start Quiz →
+          Start {quizSize === totalInBank ? "All" : quizSize} Questions →
         </button>
       </div>
 
