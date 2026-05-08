@@ -10,10 +10,12 @@ interface QuizCardProps {
   answer: AnswerRecord | undefined;
   onAnswer: (chosen: number) => void;
   onNext: () => void;
+  onBack: () => void;
   isLast: boolean;
+  isFirst: boolean;
 }
 
-export default function QuizCard({ question, answer, onAnswer, onNext, isLast }: QuizCardProps) {
+export default function QuizCard({ question, answer, onAnswer, onNext, onBack, isLast, isFirst }: QuizCardProps) {
   const hasAnswered = answer !== undefined;
 
   function getButtonClass(index: number): string {
@@ -113,16 +115,27 @@ export default function QuizCard({ question, answer, onAnswer, onNext, isLast }:
         </div>
       )}
 
-      {/* Next button */}
-      {hasAnswered && (
-        <button
-          onClick={onNext}
-          className="mt-5 w-full py-3 bg-sky-500 hover:bg-sky-400 text-slate-900 font-bold rounded-xl transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
-          aria-label={isLast ? "See your results" : "Go to next question"}
-        >
-          {isLast ? "See Results →" : "Next Question →"}
-        </button>
-      )}
+      {/* Navigation buttons */}
+      <div className={`mt-5 flex gap-3 ${hasAnswered ? "" : "justify-start"}`}>
+        {!isFirst && (
+          <button
+            onClick={onBack}
+            className="flex-none py-3 px-5 bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold rounded-xl transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+            aria-label="Go to previous question"
+          >
+            ← Previous
+          </button>
+        )}
+        {hasAnswered && (
+          <button
+            onClick={onNext}
+            className="flex-1 py-3 bg-sky-500 hover:bg-sky-400 text-slate-900 font-bold rounded-xl transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+            aria-label={isLast ? "See your results" : "Go to next question"}
+          >
+            {isLast ? "See Results →" : "Next Question →"}
+          </button>
+        )}
+      </div>
     </article>
   );
 }

@@ -54,12 +54,12 @@ export const questions: Question[] = [
     options: [
       "Using <th> elements with scope attributes to identify table headers",
       "Using <fieldset> and <legend> to group related form controls",
-      "Using bold red text alone to indicate a required form field with no code or label",
+      "Using visual indentation alone to represent heading hierarchy without semantic heading elements",
       "Using <label> elements associated with every form input",
     ],
     correct: 2,
     explanation:
-      'SC 1.3.1 requires that structure and relationships conveyed visually are also available programmatically. Using bold red text alone to indicate a required field fails this — screen reader users cannot perceive the "required" relationship. The fix is to use aria-required="true", visible text (e.g., "required"), or include it in the label so the relationship is programmatically determinable.',
+      "SC 1.3.1 requires that structure and relationships conveyed visually are also available programmatically. Using only CSS indentation or visual styling to imply a heading hierarchy — without <h1>–<h6> elements or appropriate ARIA roles — fails this criterion: screen readers and other assistive technologies cannot determine the hierarchical structure. The fix is to use semantic heading elements so the outline is programmatically determinable.",
   },
   {
     id: 4,
@@ -139,14 +139,14 @@ export const questions: Question[] = [
     question:
       "SC 2.1.1 Keyboard states all functionality must be operable via a keyboard interface, except when the underlying function requires input that depends on what?",
     options: [
-      "Simultaneous multi-point contact, such as multi-touch gestures, that a keyboard interface cannot replicate",
+      "Any feature that is more efficient or precise when using a mouse than a keyboard",
       "The path of movement and not just the endpoints",
-      "The speed or timing of input, where delays inherent to keyboard operation would alter the outcome",
-      "Physical precision beyond the level of accuracy that keyboard input can provide",
+      "Operations that are faster with a pointing device due to sequential key-press overhead",
+      "Features a developer chose to implement exclusively with mouse event handlers",
     ],
     correct: 1,
     explanation:
-      "SC 2.1.1 requires all functionality to be keyboard accessible. The only exception is functionality whose core requirement depends on the path of movement and not just the endpoints — for example, freehand drawing or handwriting recognition. This exemption is intentionally narrow; simply preferring mouse input does not justify excluding keyboard access.",
+      "SC 2.1.1 requires all functionality to be keyboard accessible. The only exception is functionality whose core requirement depends on the path of movement and not just the endpoints — for example, freehand drawing or handwriting recognition. Efficiency, developer convenience, or the availability of mouse events are not valid exemptions; only genuinely path-dependent input qualifies.",
   },
   {
     id: 10,
@@ -302,7 +302,7 @@ export const questions: Question[] = [
     sc: "4.1.2",
     level: "Level A",
     question:
-      "SC 4.1.2 Name, Role, Value requires that UI component names and roles can be programmatically determined. Which ARIA attribute provides the accessible name for an icon-only button?",
+      "SC 4.1.2 Name, Role, Value requires that UI component names and roles can be programmatically determined. Which ARIA attribute directly provides an accessible name string for an icon-only button?",
     options: [
       "aria-labelledby",
       "aria-label",

@@ -44,6 +44,12 @@ export default function Quiz() {
     }
   }
 
+  function handleBack() {
+    if (currentIndex > 0) {
+      setCurrentIndex((i) => i - 1);
+    }
+  }
+
   function handleRestart() {
     setShuffledQuestions(prepareQuestions(questions));
     setCurrentIndex(0);
@@ -106,7 +112,9 @@ export default function Quiz() {
         answer={currentAnswer}
         onAnswer={handleAnswer}
         onNext={handleNext}
+        onBack={handleBack}
         isLast={currentIndex === totalQuestions - 1}
+        isFirst={currentIndex === 0}
       />
     </div>
   );
