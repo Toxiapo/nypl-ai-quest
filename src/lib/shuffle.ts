@@ -9,13 +9,15 @@ function shuffleArray<T>(arr: T[]): T[] {
   return result;
 }
 
+const QUIZ_SIZE = 20;
+
 /**
- * Returns a new array of questions in random order, with each question's
- * answer options also shuffled. The `correct` index is updated to match
- * the new position of the originally correct option.
+ * Returns QUIZ_SIZE randomly selected questions in random order, with each
+ * question's answer options also shuffled. The `correct` index is updated
+ * to match the new position of the originally correct option.
  */
 export function prepareQuestions(questions: Question[]): Question[] {
-  return shuffleArray(questions).map((q) => {
+  return shuffleArray(questions).slice(0, QUIZ_SIZE).map((q) => {
     const indexed = q.options.map((text, i) => ({ text, originalIndex: i }));
     const shuffled = shuffleArray(indexed);
     return {
