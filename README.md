@@ -4,10 +4,13 @@ An interactive multiple-choice quiz app for studying the **Web Accessibility Spe
 
 ## Features
 
-- 34 questions across all three WAS exam domains, including all 7 new WCAG 2.2 success criteria
-- One question at a time with A–D answer choices
+- **101-question bank** — 20 questions drawn and randomized per session, including all 7 new WCAG 2.2 success criteria
+- Intro screen with quiz overview and a Start button
+- Live timer that counts up during the quiz, with **pause and resume** support
+- One question at a time with A–D answer choices (options are also shuffled each session)
+- Navigate back to revisit previous questions
 - Instant explanation after each answer with correct/incorrect highlighting
-- Score summary with per-question breakdown and completion time
+- Score summary with per-question breakdown and total completion time
 - Study history persisted to the local filesystem (no external database)
 - `/history` page with aggregate stats and a **Focus Areas** panel showing which topics you miss most often
 
@@ -32,17 +35,21 @@ src/app/
                                renders stats, focus areas, and attempt list
 
 src/components/
-  ├── Quiz.tsx                 Manages quiz state + duration tracking
+  ├── IntroScreen.tsx          Landing screen shown before the quiz starts
+  ├── Quiz.tsx                 Manages quiz phases (intro/quiz/paused/summary),
+  │                            timer, pause/resume, and restart
   ├── QuizCard.tsx             Renders one question, options, and explanation
   └── Summary.tsx              POSTs result on mount, links to /history
 
-src/data/questions.ts          All 34 questions with options and explanations
+src/data/questions.ts          101-question bank with options and explanations
+src/lib/shuffle.ts             Selects and randomizes 20 questions per session
 ```
 
 **Data flow:**
-1. User completes quiz → `Summary` POSTs to `POST /api/results`
-2. API handler calls `saveResult()` → written to `data/results.json`
-3. Visiting `/history` → Next.js Server Component calls `getAllResults()` directly from disk and renders server-side
+1. User clicks Start → 20 questions are randomly selected and shuffled from the 101-question bank
+2. User completes quiz → `Summary` POSTs to `POST /api/results`
+3. API handler calls `saveResult()` → written to `data/results.json`
+4. Visiting `/history` → Next.js Server Component calls `getAllResults()` directly from disk and renders server-side
 
 ## Getting Started
 
