@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WAS Exam Study Quiz
+
+An interactive multiple-choice quiz app for studying the **Web Accessibility Specialist (WAS)** exam — covering WCAG 2.2 Success Criteria, WAI-ARIA, ATAG, and the WAS Body of Knowledge.
+
+## Features
+
+- 34 questions across all three WAS exam domains, including all 7 new WCAG 2.2 success criteria
+- One question at a time with A–D answer choices
+- Instant explanation after each answer with correct/incorrect highlighting
+- Score summary with per-question breakdown and completion time
+- Study history persisted to the local filesystem (no external database)
+- `/history` page with aggregate stats and a **Focus Areas** panel showing which topics you miss most often
+
+## Architecture
+
+```
+Filesystem (data/results.json)
+  └── Persists quiz attempts as JSON — no third-party database
+
+src/lib/db.ts                  Server-only utility
+  ├── getAllResults()           Reads results.json from disk
+  └── saveResult()             Appends a new attempt, writes back to disk
+
+src/app/api/results/
+  └── route.ts                 REST API
+        GET  /api/results      Returns all stored attempts
+        POST /api/results      Validates and saves a new attempt
+
+src/app/
+  ├── page.tsx                 Home — renders the Quiz client component
+  └── history/page.tsx         Server Component — reads disk directly,
+                               renders stats, focus areas, and attempt list
+
+src/components/
+  ├── Quiz.tsx                 Manages quiz state + duration tracking
+  ├── QuizCard.tsx             Renders one question, options, and explanation
+  └── Summary.tsx              POSTs result on mount, links to /history
+
+src/data/questions.ts          All 34 questions with options and explanations
+```
+
+**Data flow:**
+1. User completes quiz → `Summary` POSTs to `POST /api/results`
+2. API handler calls `saveResult()` → written to `data/results.json`
+3. Visiting `/history` → Next.js Server Component calls `getAllResults()` directly from disk and renders server-side
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to take the quiz, and [http://localhost:3000/history](http://localhost:3000/history) to view your study history.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> `data/results.json` is created automatically on first quiz completion and is gitignored — it is local runtime data only.
