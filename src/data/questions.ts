@@ -1721,5 +1721,861 @@ export const questions: Question[] = [
     explanation:
       "On iOS with VoiceOver, a one-finger swipe right moves VoiceOver focus to the next element in reading order; a one-finger swipe left moves to the previous element. To activate the focused element, the user double-taps with one finger (anywhere on the screen, not necessarily on the element). Two-finger swipe down triggers 'Read All' from the current position. This gesture model is distinct from macOS VoiceOver (which uses VO+Right/Left Arrow) and from standard iOS touch interaction, where a single tap activates an element directly.",
   },
+
+  // ── APG — Additional Patterns ────────────────────────────────────────────────
+
+  {
+    id: 101,
+    category: "APG · Accordion Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "In the APG Accordion pattern, which keys activate an accordion header button to expand or collapse its associated panel?",
+    options: [
+      "Tab and Shift+Tab",
+      "Left Arrow and Right Arrow",
+      "Enter or Space",
+      "Home and End",
+    ],
+    correct: 2,
+    explanation:
+      "The APG Accordion pattern specifies that Enter or Space activates the accordion header button to expand a collapsed panel (or collapse an expanded panel, if collapsing is supported). Tab and Shift+Tab move focus through all focusable elements in the accordion. Up Arrow and Down Arrow are optional keys that move focus between accordion headers. This contrasts with the Tabs pattern where arrow keys are the primary navigation mechanism.",
+  },
+  {
+    id: 102,
+    category: "APG · Accordion Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "In the APG Accordion pattern, what ARIA attributes must each accordion header button have, and what must each panel container optionally use?",
+    options: [
+      "aria-selected on the button; role=\"tabpanel\" on the panel",
+      "aria-expanded on the button; optionally role=\"region\" with aria-labelledby on the panel",
+      "aria-pressed on the button; aria-hidden on the panel when collapsed",
+      "aria-checked on the button; aria-owns on the heading",
+    ],
+    correct: 1,
+    explanation:
+      "The APG Accordion pattern requires aria-expanded=\"true\" or \"false\" on the header button to indicate panel visibility, and aria-controls pointing to the panel's ID. Optionally, the panel container may use role=\"region\" with aria-labelledby referencing the button, which helps screen reader users perceive the panel as a named landmark section. The APG advises against using role=\"region\" when more than ~6 panels may be open simultaneously, to avoid landmark proliferation.",
+  },
+  {
+    id: 103,
+    category: "APG · Button Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "According to the APG Button pattern, which keys activate a button widget?",
+    options: [
+      "Enter only — Space is reserved for scrolling the page",
+      "Space only — Enter is reserved for form submission",
+      "Both Enter and Space",
+      "Enter, Space, or Tab",
+    ],
+    correct: 2,
+    explanation:
+      "The APG Button pattern specifies that both Enter and Space activate a button. This is an important distinction from the Link pattern, where only Enter activates the link. When building custom buttons from non-native elements (e.g., <div role=\"button\">), developers must explicitly handle both keypress events. Native HTML <button> elements handle this automatically through browser behavior.",
+  },
+  {
+    id: 104,
+    category: "APG · Button Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "A toggle button in the APG Button pattern uses aria-pressed. Which statement correctly describes how a toggle button label should behave when toggled?",
+    options: [
+      "The label must change from 'Mute' to 'Unmute' when toggled so the current state is always clear from the label alone",
+      "The label must remain constant (e.g., 'Mute') regardless of state; aria-pressed conveys the current state to assistive technologies",
+      "The label should be removed when aria-pressed is true to avoid redundant announcements",
+      "The label and aria-pressed value must always match: label 'On' when aria-pressed=\"true\", label 'Off' when aria-pressed=\"false\"",
+    ],
+    correct: 1,
+    explanation:
+      "The APG Button pattern states that the label of a toggle button must NOT change when its state changes. If a button is labelled 'Mute', it remains 'Mute' whether the audio is muted or not — aria-pressed=\"true\" or \"false\" communicates the state to assistive technologies. A screen reader would announce something like 'Mute toggle button pressed'. If the design calls for the label itself to change (e.g., 'Mute' → 'Unmute'), aria-pressed is not needed — the label change itself conveys the state.",
+  },
+  {
+    id: 105,
+    category: "APG · Button Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "According to the APG, what is the key functional difference between a link and a button that determines which element to use?",
+    options: [
+      "Links use Enter to activate; buttons use Space — the interaction model determines the element",
+      "Links navigate to a new resource or location; buttons trigger an action or event within the current context",
+      "Buttons can be disabled with aria-disabled; links cannot be disabled",
+      "Links are always inline elements; buttons are always block-level elements",
+    ],
+    correct: 1,
+    explanation:
+      "The APG Button pattern emphasizes that the element type must match its function: links navigate to resources (changing the URL or position), while buttons trigger actions (submitting forms, opening dialogs, performing operations). When an element looks like a link but performs a button action, giving it role=\"button\" corrects the semantic mismatch. The APG notes that a better solution is to adjust the visual design to match the function rather than relying on ARIA to correct mismatches.",
+  },
+  {
+    id: 106,
+    category: "APG · Breadcrumb Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "According to the APG Breadcrumb pattern, which ARIA attribute should be applied to the link representing the current page in the breadcrumb trail?",
+    options: [
+      "aria-selected=\"true\"",
+      "aria-current=\"page\"",
+      "aria-pressed=\"true\"",
+      "aria-expanded=\"false\"",
+    ],
+    correct: 1,
+    explanation:
+      "The APG Breadcrumb pattern specifies that the link representing the current page should have aria-current=\"page\". This informs assistive technologies that this particular item in the breadcrumb represents the user's current location. The breadcrumb trail itself must be wrapped in a navigation landmark (role=\"navigation\" or <nav>) with an accessible label such as aria-label=\"Breadcrumb\" to distinguish it from other navigation regions on the page.",
+  },
+  {
+    id: 107,
+    category: "APG · Checkbox Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "In the APG Checkbox pattern, what value of aria-checked represents the 'partially checked' or indeterminate state of a tri-state checkbox?",
+    options: [
+      "aria-checked=\"indeterminate\"",
+      "aria-checked=\"partial\"",
+      "aria-checked=\"mixed\"",
+      "aria-checked=\"undefined\"",
+    ],
+    correct: 2,
+    explanation:
+      "The APG Checkbox pattern defines three valid values for aria-checked on a checkbox: \"true\" (checked), \"false\" (not checked), and \"mixed\" (partially checked / indeterminate). The mixed state is used for tri-state checkboxes, commonly seen in 'select all' scenarios where some but not all child options are checked. The HTML <input type=\"checkbox\"> equivalent is the indeterminate property, but in ARIA the keyword is specifically \"mixed\".",
+  },
+  {
+    id: 108,
+    category: "APG · Checkbox Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "When presenting a group of checkboxes as a logical group with a visible label, what ARIA structure does the APG Checkbox pattern recommend?",
+    options: [
+      "Wrap all checkboxes in a <ul> with aria-label on the list element",
+      "Use role=\"group\" with aria-labelledby referencing the group's visible label",
+      "Use role=\"listbox\" with aria-multiselectable=\"true\"",
+      "Apply aria-owns from the first checkbox to all other checkboxes in the group",
+    ],
+    correct: 1,
+    explanation:
+      "The APG Checkbox pattern recommends wrapping a logical group of checkboxes in an element with role=\"group\" and setting aria-labelledby to the ID of the element containing the group's visible label. This is analogous to the native HTML <fieldset> and <legend> pattern. The group role provides the accessible container that announces the group label before individual checkbox names, helping users understand the collective purpose of the options.",
+  },
+  {
+    id: 109,
+    category: "APG · Carousel Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "According to the APG Carousel pattern, what must happen to automatic slide rotation when a keyboard user moves focus into the carousel?",
+    options: [
+      "Rotation slows down by 50% to give the user more time to read",
+      "Rotation stops and must not restart unless the user explicitly activates the rotation control",
+      "Rotation pauses for 3 seconds then automatically resumes",
+      "Rotation continues but the currently focused slide is skipped",
+    ],
+    correct: 1,
+    explanation:
+      "The APG Carousel pattern requires that if a carousel auto-rotates, rotation must stop when keyboard focus enters any element in the carousel. Critically, it must NOT automatically restart — the user must explicitly activate the rotation control to resume it. This requirement exists because auto-rotation while a screen reader user is navigating creates a disorienting experience: the user may read an element on slide 1, execute a next-element command, and land on slide 2 without any awareness of the context change.",
+  },
+  {
+    id: 110,
+    category: "APG · Carousel Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "In an auto-rotating APG Carousel, where should the rotation control button (stop/start) be positioned in the tab sequence?",
+    options: [
+      "After all slide content, so users navigate all slides before reaching the control",
+      "As the first element in the Tab sequence inside the carousel",
+      "Outside the carousel, in the page header",
+      "The rotation control is optional and can be placed anywhere that fits the design",
+    ],
+    correct: 1,
+    explanation:
+      "The APG Carousel pattern specifies that if a rotation control is present, it must be the first element in the Tab sequence inside the carousel. This positioning is essential because it allows keyboard users to locate and activate the stop button quickly before having to navigate through any rotating content. Placing the control after the slides would force users to Tab through potentially changing content before they can stop the rotation.",
+  },
+  {
+    id: 111,
+    category: "APG · Toolbar Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "According to the APG Toolbar pattern, how should keyboard focus work when a user Tabs into a horizontal toolbar?",
+    options: [
+      "Tab cycles through each control in the toolbar individually, one per Tab keypress",
+      "The entire toolbar is a single Tab stop; Left Arrow and Right Arrow move focus between controls within it",
+      "Tab moves directly to the first interactive control; Up/Down Arrow navigate between controls",
+      "Tab is not supported inside toolbars — screen readers must use virtual cursor mode",
+    ],
+    correct: 1,
+    explanation:
+      "The APG Toolbar pattern uses a single Tab stop for the entire toolbar container (roving tabindex). Once focus enters the toolbar, Left Arrow and Right Arrow navigate between controls in a horizontal toolbar. This design reduces the number of Tab stops on the page, making keyboard navigation more efficient for users who don't need to interact with toolbar controls. Tab and Shift+Tab move focus into and out of the toolbar as a unit.",
+  },
+  {
+    id: 112,
+    category: "APG · Toolbar Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "The APG Toolbar pattern requires the toolbar element to have an accessible label. If the toolbar has a visible label, how should it be provided?",
+    options: [
+      "aria-label with the label text repeated as a string",
+      "aria-labelledby referencing the ID of the visible label element",
+      "A <caption> element inside the toolbar container",
+      "The title attribute on the toolbar element",
+    ],
+    correct: 1,
+    explanation:
+      "The APG Toolbar pattern specifies that if the toolbar has a visible label, the toolbar element should reference it with aria-labelledby pointing to that element's ID. If there is no visible label, aria-label provides the label as a string. This follows the general ARIA principle of preferring aria-labelledby over aria-label when visible text already exists — it creates a connection between the programmatic name and the visible interface, benefiting both screen reader users and speech input users.",
+  },
+  {
+    id: 113,
+    category: "APG · Tooltip Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "According to the APG Tooltip pattern, how does an element's tooltip relate to its accessible name vs. accessible description?",
+    options: [
+      "The tooltip provides the accessible name via aria-labelledby on the tooltip container",
+      "The tooltip provides supplementary description; the trigger element references it with aria-describedby",
+      "The tooltip replaces the element's aria-label when it appears on screen",
+      "The tooltip must have role=\"alert\" so screen readers announce it immediately",
+    ],
+    correct: 1,
+    explanation:
+      "The APG Tooltip pattern specifies that the tooltip element has role=\"tooltip\" and the element that triggers it (e.g., a button) references the tooltip with aria-describedby. This makes the tooltip content the accessible description — supplementary information that screen readers announce after the element's name and role. The tooltip does not provide the element's accessible name. Focus remains on the triggering element; the tooltip itself never receives focus.",
+  },
+  {
+    id: 114,
+    category: "APG · Tooltip Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "In the APG Tooltip pattern, which key dismisses a tooltip that has appeared?",
+    options: [
+      "Tab — moving focus away closes the tooltip",
+      "Enter — activates the triggering element and closes the tooltip",
+      "Escape — dismisses the tooltip",
+      "Space — toggles the tooltip visibility",
+    ],
+    correct: 2,
+    explanation:
+      "The APG Tooltip pattern specifies that pressing Escape dismisses the tooltip. Additionally, if the tooltip was triggered by focus, it disappears when the element loses focus (onBlur). If triggered by hover, it remains open while the pointer is over the trigger or the tooltip itself. Importantly, focus never moves into the tooltip — it always stays on the triggering element. If a hover widget needs to contain focusable elements, a non-modal dialog should be used instead.",
+  },
+  {
+    id: 115,
+    category: "APG · Spinbutton Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "In the APG Spinbutton pattern, which keys increase and decrease the spinbutton value?",
+    options: [
+      "Right Arrow increases; Left Arrow decreases",
+      "Tab moves to the increase button; Shift+Tab moves to the decrease button",
+      "Up Arrow increases; Down Arrow decreases",
+      "Page Up increases by 1; Page Down decreases by 1",
+    ],
+    correct: 2,
+    explanation:
+      "The APG Spinbutton pattern specifies that Up Arrow increases the value and Down Arrow decreases it. Home sets the value to the minimum (if a minimum exists) and End sets it to the maximum. Page Up and Page Down are optional keys for larger increments/decrements. Focus remains on the text field during all keyboard operations. The increase and decrease buttons visible on screen are not separate Tab stops — the entire widget is a single Tab stop.",
+  },
+  {
+    id: 116,
+    category: "APG · Spinbutton Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "When should the aria-valuetext attribute be used on a role=\"spinbutton\" element?",
+    options: [
+      "Always — it must duplicate the aria-valuenow value for redundancy",
+      "When the numeric aria-valuenow value is not user-friendly on its own, e.g., a day-of-week stored as a number",
+      "Only when the spinbutton is read-only",
+      "When the spinbutton has no visible label",
+    ],
+    correct: 1,
+    explanation:
+      "aria-valuetext provides a human-readable string alternative to the numeric aria-valuenow. The APG Spinbutton pattern specifies its use when the number alone is not meaningful — for example, if a spinbutton stores day-of-week as 1–7, aria-valuetext=\"Monday\" makes the announcement meaningful. Similarly, a slider representing T-shirt sizes might store 1, 2, 3 but display 'Small', 'Medium', 'Large' via aria-valuetext. When aria-valuetext is present, assistive technologies announce it instead of aria-valuenow.",
+  },
+  {
+    id: 117,
+    category: "APG · Menu & Menubar Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "In the APG Menu and Menubar pattern, what does pressing Down Arrow do when focus is on a menuitem in a horizontal menubar that has a submenu?",
+    options: [
+      "Moves focus to the next menuitem in the menubar",
+      "Opens the submenu and places focus on the first item in the submenu",
+      "Scrolls the page downward without changing focus",
+      "Closes any open submenus and returns focus to the menubar",
+    ],
+    correct: 1,
+    explanation:
+      "The APG Menu and Menubar pattern specifies that when focus is on a menuitem in a horizontal menubar that has a submenu, pressing Down Arrow opens the submenu and places focus on the first item in that submenu. This is the primary way to open a submenu in a menubar. Enter also opens a submenu when focus is on a menuitem that has children. In contrast, Right Arrow moves focus to the next item in the menubar (not into a submenu).",
+  },
+  {
+    id: 118,
+    category: "APG · Menu & Menubar Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "According to the APG Menu and Menubar pattern, what happens when Tab or Shift+Tab is pressed while focus is on an item inside an open menu?",
+    options: [
+      "Tab moves focus to the next menuitem in the current menu",
+      "Tab closes all menus and moves focus to the next focusable element outside the menu",
+      "Tab moves focus into the submenu if one exists",
+      "Tab has no effect inside menus — only arrow keys navigate",
+    ],
+    correct: 1,
+    explanation:
+      "The APG Menu and Menubar pattern specifies that Tab and Shift+Tab move focus OUT of the menu or menubar, closing all open menus and submenus, and moving to the next (or previous) focusable element in the page tab sequence. Inside a menu, Tab does not navigate between menu items — arrow keys are exclusively used for that purpose. The menu is a composite widget where the internal navigation relies on arrow keys, not Tab.",
+  },
+  {
+    id: 119,
+    category: "APG · Link Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "According to the APG Link pattern, which key activates a link?",
+    options: [
+      "Space — the same key that activates buttons",
+      "Enter — executes the link and moves focus to the link target",
+      "Both Enter and Space — same as buttons",
+      "Tab — moves focus to the link, which auto-activates on focus",
+    ],
+    correct: 1,
+    explanation:
+      "The APG Link pattern specifies that Enter activates a link and moves focus to the link target. Unlike buttons (which respond to both Enter and Space), links only respond to Enter. This is a critical distinction — custom link elements built with role=\"link\" must implement Enter key handling, and developers must not assume Space also activates links. The optional Shift+F10 can open a context menu for the link on some platforms.",
+  },
+  {
+    id: 120,
+    category: "APG · Landmarks Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "The APG Landmarks pattern describes eight landmark roles. Which of the following is NOT one of the eight ARIA landmark roles?",
+    options: [
+      "banner",
+      "contentinfo",
+      "article",
+      "complementary",
+    ],
+    correct: 2,
+    explanation:
+      "The eight ARIA landmark roles are: banner, complementary, contentinfo, form, main, navigation, region, and search. The role \"article\" is a document structure role, not a landmark role — it is used to mark self-contained content like a blog post or news article, but it does not create a navigable landmark region in assistive technologies the way landmark roles do. The <article> HTML element has an implicit role of \"article\", not a landmark role.",
+  },
+  {
+    id: 121,
+    category: "APG · Landmarks Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "The APG Landmarks practice recommends a general limit on the number of landmark regions per page. What is this guideline, and why?",
+    options: [
+      "No more than 3 landmarks — one each for header, main, and footer",
+      "No more than 7 landmarks — value diminishes as the number grows, making navigation harder",
+      "No more than 15 landmarks — the screen reader landmark list becomes unmanageable above this",
+      "There is no recommended limit — more landmarks always improve navigation",
+    ],
+    correct: 1,
+    explanation:
+      "The APG Landmarks practice states that the value of landmarks 'diminishes as their number grows,' and as a general rule, a page should contain seven or fewer landmark regions. Too many landmarks make the landmark list in a screen reader cluttered and harder to navigate efficiently — the benefit of quick jumping is reduced if there are dozens of regions to scroll through. Another best practice is to ensure all visible content is contained within a landmark region.",
+  },
+  {
+    id: 122,
+    category: "APG · Grid Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "According to the APG, what is the key distinction between role=\"grid\" and role=\"table\"?",
+    options: [
+      "role=\"grid\" requires all cells to be editable; role=\"table\" allows read-only content",
+      "role=\"grid\" is an interactive widget where cells may contain focusable or interactive content; role=\"table\" is a static document structure",
+      "role=\"table\" supports column sorting via aria-sort; role=\"grid\" does not",
+      "role=\"grid\" must have column headers; role=\"table\" column headers are optional",
+    ],
+    correct: 1,
+    explanation:
+      "The APG distinguishes grid from table by interactivity: role=\"grid\" is a composite widget that enables navigation using directional keys (arrow keys, Home, End, Page Up, Page Down) and may contain interactive or focusable elements within cells. role=\"table\" is a static document structure — a read-only tabular display of data — analogous to an HTML <table> used for non-interactive data. Cells in a grid may contain widgets; cells in a table contain static content. This determines which keyboard interaction pattern applies.",
+  },
+  {
+    id: 123,
+    category: "APG · Feed Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "In the APG Feed pattern, which role is applied to the feed container, and what keyboard interaction allows users to move between articles?",
+    options: [
+      "role=\"list\" on the container; Tab/Shift+Tab between articles",
+      "role=\"feed\" on the container; Page Down moves to the next article, Page Up moves to the previous",
+      "role=\"log\" on the container; arrow keys navigate between articles",
+      "role=\"region\" on the container; H key (screen reader shortcut) moves between articles",
+    ],
+    correct: 1,
+    explanation:
+      "The APG Feed pattern uses role=\"feed\" on the container. Each content item is an element with role=\"article\". When focus is inside an article, Page Down moves focus to the next article and Page Up moves it to the previous article. End moves focus to the last article loaded, and Tab moves focus to the next focusable element inside the current article. The feed pattern is designed for pages that load more content as the user scrolls (infinite scroll), and screen reader users need a way to navigate between articles efficiently.",
+  },
+  {
+    id: 124,
+    category: "APG · Tree Pattern",
+    sc: "APG",
+    level: "Development",
+    question:
+      "In the APG Tree pattern, what does pressing the Left Arrow key do when focus is on an expanded tree node?",
+    options: [
+      "Moves focus to the parent node one level up the hierarchy",
+      "Collapses the node without moving focus",
+      "Collapses the node if it is expanded; if already collapsed, moves focus to the parent node",
+      "Moves focus to the previous sibling at the same level",
+    ],
+    correct: 2,
+    explanation:
+      "The APG Tree pattern specifies that Left Arrow has two behaviors depending on state: (1) if the focused node is expanded (aria-expanded=\"true\"), Left Arrow collapses it without moving focus; (2) if the focused node is already collapsed or is a leaf node, Left Arrow moves focus to the parent node. This is the inverse of Right Arrow behavior: Right Arrow expands a collapsed node, and if already expanded, moves focus to the first child.",
+  },
+
+  // ── WAI-ARIA 1.2 — States, Properties & Roles ───────────────────────────────
+
+  {
+    id: 125,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What is the behavioral difference between aria-live=\"polite\" and aria-live=\"assertive\"?",
+    options: [
+      "aria-live=\"polite\" announces changes immediately; aria-live=\"assertive\" waits for user inactivity",
+      "aria-live=\"polite\" waits until the user is idle before announcing; aria-live=\"assertive\" interrupts the current announcement immediately",
+      "aria-live=\"polite\" is for error messages; aria-live=\"assertive\" is for status messages",
+      "They are functionally equivalent — the difference is purely semantic for documentation purposes",
+    ],
+    correct: 1,
+    explanation:
+      "aria-live=\"polite\" defers the announcement until the user finishes their current action or the screen reader finishes reading the current item — it is non-interruptive and appropriate for most dynamic updates (status messages, search results). aria-live=\"assertive\" interrupts whatever the screen reader is currently announcing to immediately read the change — it should be used sparingly, only for critical, time-sensitive information. Overuse of assertive live regions creates a confusing, noisy experience.",
+  },
+  {
+    id: 126,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What does the aria-atomic attribute control in a live region?",
+    options: [
+      "Whether the live region content is updated in small increments (atomic=false) or all at once (atomic=true)",
+      "When aria-atomic=\"true\", the entire live region is announced as a whole when any part changes; when \"false\", only the changed nodes are announced",
+      "Whether child elements can inherit the live region behavior from their parent container",
+      "Whether the live region is read once and then becomes silent, or repeats on every update",
+    ],
+    correct: 1,
+    explanation:
+      "aria-atomic controls the granularity of announcements in a live region. When aria-atomic=\"true\", assistive technologies announce the entire content of the region whenever any part of it changes — useful for regions like a clock or score where all parts are meaningful together. When aria-atomic=\"false\" (the default), only the specific nodes that changed are announced. For example, a region showing 'Items in cart: 3' with aria-atomic=\"true\" would announce the full sentence when the number changes, not just '4'.",
+  },
+  {
+    id: 127,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What does the aria-busy attribute communicate, and when should it be set to true?",
+    options: [
+      "It indicates that the element is visually busy (animated) and should be skipped by screen readers",
+      "It indicates that the element is being updated and assistive technologies should wait before processing its content",
+      "It marks an element as interactive and currently receiving user input",
+      "It prevents the element from being announced in a live region until the user requests it",
+    ],
+    correct: 1,
+    explanation:
+      "aria-busy=\"true\" signals to assistive technologies that the element is in the process of being updated and they should wait for the update to complete before processing the content. When a large or complex live region is loading content (e.g., an entire table of search results is being replaced), setting aria-busy=\"true\" prevents the AT from announcing partial or incomplete content. Once the update is complete, aria-busy should be set back to \"false\" (or removed) to allow the AT to process and announce the final content.",
+  },
+  {
+    id: 128,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "WAI-ARIA 1.2 defines five categories of roles. Which of the following correctly names all five?",
+    options: [
+      "Widget roles, Document structure roles, Landmark roles, Live region roles, Window roles",
+      "Interactive roles, Static roles, Navigation roles, Alert roles, Container roles",
+      "Widget roles, Semantic roles, Landmark roles, ARIA-live roles, Modal roles",
+      "Action roles, Structure roles, Landmark roles, Notification roles, Overlay roles",
+    ],
+    correct: 0,
+    explanation:
+      "WAI-ARIA 1.2 categorizes all roles into five groups: (1) Widget roles — interactive UI controls (button, checkbox, slider, etc.); (2) Document structure roles — structural organization of content (article, list, table, etc.); (3) Landmark roles — major page sections (banner, main, navigation, etc.); (4) Live region roles — regions whose content updates dynamically (alert, log, marquee, status, timer); (5) Window roles — sub-windows within an application (alertdialog, dialog). Understanding these categories helps authors select the appropriate role for each element.",
+  },
+  {
+    id: 129,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What is the purpose of WAI-ARIA abstract roles, and can they be used by content authors?",
+    options: [
+      "Abstract roles define conceptual categories in the role taxonomy; they cannot be used directly in content",
+      "Abstract roles are simplified versions of complex roles designed for beginners; they can be used anywhere",
+      "Abstract roles apply only to SVG and canvas elements, not HTML content",
+      "Abstract roles are deprecated in WAI-ARIA 1.2 and have been replaced by document structure roles",
+    ],
+    correct: 0,
+    explanation:
+      "WAI-ARIA abstract roles (such as composite, input, landmark, range, roletype, section, structure, widget, and window) define the conceptual hierarchy and shared characteristics of other roles — they exist to organize the role taxonomy. Authors must never use abstract roles directly in content markup; doing so is a conformance error. For example, you would not write role=\"widget\" — instead you would use a concrete widget role like role=\"button\" or role=\"checkbox\". Abstract roles are purely a classification mechanism in the specification.",
+  },
+  {
+    id: 130,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What is the key difference between using aria-disabled=\"true\" and the HTML disabled attribute on a form control?",
+    options: [
+      "aria-disabled prevents form submission; HTML disabled allows the form to submit the field's value",
+      "aria-disabled keeps the element in the tab order and focusable; HTML disabled removes the element from the tab order entirely",
+      "aria-disabled is only recognized by screen readers; HTML disabled is the only way to visually gray out a control",
+      "There is no functional difference — they are interchangeable",
+    ],
+    correct: 1,
+    explanation:
+      "The critical difference is focusability: HTML disabled removes the element from the tab order and prevents all interaction, while aria-disabled=\"true\" keeps the element focusable and in the tab order but communicates a disabled state to assistive technologies. aria-disabled is useful when you want screen reader users to be able to discover the disabled control (and perhaps understand why it is unavailable), while preventing actual activation. When using aria-disabled, you must also prevent keyboard and click event handlers from activating the control via scripting.",
+  },
+  {
+    id: 131,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What does aria-required=\"true\" communicate, and how does it differ from the HTML required attribute?",
+    options: [
+      "They are completely identical in behavior — both prevent form submission and announce the field as required",
+      "aria-required communicates to assistive technologies that the field must be filled in, but unlike HTML required, it does not trigger browser-native validation or prevent form submission",
+      "aria-required is only for custom widgets; HTML required is for native form elements — they serve completely different roles",
+      "HTML required prevents the form from submitting; aria-required marks the field as optional to AT",
+    ],
+    correct: 1,
+    explanation:
+      "aria-required=\"true\" tells assistive technologies that the field must be completed before submission, allowing screen readers to announce it as required. However, unlike the HTML required attribute, aria-required does not activate browser-native form validation or prevent form submission. For native HTML inputs, using the HTML required attribute is preferred as it provides both the accessible semantic and built-in validation. When both are present on a native element, the HTML required attribute takes precedence for validation.",
+  },
+  {
+    id: 132,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What does aria-readonly=\"true\" communicate about a form control?",
+    options: [
+      "The control is hidden from assistive technologies and cannot receive focus",
+      "The control's value cannot be changed by the user, but the value is still readable and will be included in form submission",
+      "The control is disabled and will not be submitted with the form",
+      "The control can be read by screen readers but not by braille displays",
+    ],
+    correct: 1,
+    explanation:
+      "aria-readonly=\"true\" signals that the element's value is not editable by the user — they can read and copy the content but cannot modify it. Crucially, unlike disabled controls, a readonly control is still focusable and its value is included in form submissions. This is analogous to the HTML readonly attribute on inputs. For example, an auto-populated field showing a calculated result might be aria-readonly to prevent editing while still being accessible and submitted with the form.",
+  },
+  {
+    id: 133,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "The aria-multiselectable attribute allows multiple items to be selected in certain widget roles. Which roles support aria-multiselectable?",
+    options: [
+      "combobox, dialog, and menu",
+      "grid, listbox, tablist, and tree",
+      "radiogroup, toolbar, and accordion",
+      "form, main, and navigation",
+    ],
+    correct: 1,
+    explanation:
+      "aria-multiselectable is supported on grid, listbox, tablist, and tree roles. When set to true, it indicates that more than one item in the container can be selected simultaneously. For a listbox, this typically enables multi-select with Shift+Click and Ctrl+Click (or equivalent keyboard patterns). For a tablist, it indicates multiple panels can be active at once (though this is rarely implemented). Authors must also provide clear instructions for how to make multiple selections, as keyboard patterns for multi-select may not be universally known.",
+  },
+  {
+    id: 134,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What is the purpose of aria-posinset and aria-setsize, and when should they be used?",
+    options: [
+      "They define visual positioning (top, left coordinates) for absolutely positioned ARIA widgets",
+      "They communicate an item's position within a set and the total set size when the DOM structure cannot convey this information — for example, in virtualized lists",
+      "They replace the HTML list counter mechanism for ordered lists with role=\"listitem\"",
+      "They are used to specify tab order priority within composite widgets",
+    ],
+    correct: 1,
+    explanation:
+      "aria-posinset indicates an item's position within its parent set (e.g., 'item 5'), and aria-setsize indicates the total number of items in the set (e.g., 'of 100'). Screen readers announce something like 'Option 5 of 100'. These attributes are needed when the full set is not present in the DOM — such as in virtualized lists or infinite scroll where only a subset of items are rendered at a time. When all items are present in the DOM, the browser calculates position and size automatically from the DOM structure, and these attributes are unnecessary.",
+  },
+  {
+    id: 135,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What are the valid values for aria-haspopup, and what does each communicate?",
+    options: [
+      "true or false only — indicates whether any popup will appear",
+      "false (no popup), true or \"menu\" (menu popup), \"listbox\", \"tree\", \"grid\", or \"dialog\" — each indicating the type of popup that will appear",
+      "\"visible\" or \"hidden\" — indicating the current visibility state of the popup",
+      "\"menu\", \"list\", or \"modal\" — the three APG-defined popup types",
+    ],
+    correct: 1,
+    explanation:
+      "aria-haspopup accepts: false (default — no popup), true or \"menu\" (a menu popup), \"listbox\" (a listbox popup), \"tree\" (a tree popup), \"grid\" (a grid popup), or \"dialog\" (a dialog popup). The specific value tells assistive technologies what type of popup will open, so they can prepare the user for the expected interaction. For example, a combobox uses aria-haspopup=\"listbox\", while a menu button uses aria-haspopup=\"menu\". This is a static property — it describes what type of popup the element controls, not whether the popup is currently visible (that is aria-expanded).",
+  },
+  {
+    id: 136,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What are the valid values for aria-invalid, and what is the difference between \"grammar\" and \"spelling\"?",
+    options: [
+      "true or false only",
+      "false (default), true (general invalid), \"grammar\" (grammatical error), \"spelling\" (spelling error)",
+      "\"error\", \"warning\", \"info\", or \"success\"",
+      "\"invalid\", \"valid\", or \"pending\"",
+    ],
+    correct: 1,
+    explanation:
+      "aria-invalid accepts four values: \"false\" (default — no error), \"true\" (the value is invalid for an unspecified reason), \"grammar\" (the value contains a grammatical error), and \"spelling\" (the value contains a spelling error). The grammar and spelling values allow assistive technologies to communicate the specific nature of the error to users. When aria-invalid is true or a specific error value, it should be paired with aria-errormessage or aria-describedby pointing to a message that explains the error.",
+  },
+  {
+    id: 137,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What is the purpose of aria-errormessage, and how does it differ from using aria-describedby for error messages?",
+    options: [
+      "They are interchangeable — both reference error text and have the same AT behavior",
+      "aria-errormessage is specifically for referencing an error message element and should only be used when aria-invalid is true; aria-describedby is a general description reference used for any supplementary information",
+      "aria-describedby is for errors; aria-errormessage is for general descriptions — they are commonly confused",
+      "aria-errormessage announces immediately like role=\"alert\"; aria-describedby waits for user action",
+    ],
+    correct: 1,
+    explanation:
+      "aria-errormessage points to an element containing a specific error message and should only be used when the field has aria-invalid set to a non-false value. aria-describedby is a more general mechanism for associating supplementary descriptions with any element — it can be used for hints, instructions, or additional context, not just errors. Using aria-errormessage signals specifically that the referenced text is an error message, helping assistive technologies convey a more precise semantic to the user than a generic description.",
+  },
+  {
+    id: 138,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What is the purpose of aria-owns, and when should it be used instead of relying on the DOM structure?",
+    options: [
+      "aria-owns sets the z-index stacking order for overlapping ARIA widgets",
+      "aria-owns establishes a virtual parent-child ownership relationship when the actual parent-child relationship cannot be represented in the DOM — for example, a popup controlled by a button in a different DOM branch",
+      "aria-owns is used to indicate which element contains the primary content of a page region",
+      "aria-owns transfers keyboard focus ownership to a different element in the page",
+    ],
+    correct: 1,
+    explanation:
+      "aria-owns declares that an element 'owns' the referenced elements as children in the accessibility tree, even if they are not DOM descendants. This is necessary when DOM structure cannot express the relationship — for example, a listbox popup whose DOM parent is the <body> but which is logically owned by a combobox input. Assistive technologies use the aria-owns relationship to correctly construct the accessible object model. It should be used sparingly since it can create confusing experiences if the visual and accessibility-tree structures diverge significantly.",
+  },
+  {
+    id: 139,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What does aria-controls communicate, and what is a common misuse of this attribute?",
+    options: [
+      "aria-controls names the element that provides keyboard control for the widget — commonly misused as a label substitute",
+      "aria-controls references the ID of an element whose content or display is controlled by the current element; commonly misused as a substitute for aria-owns or aria-labelledby",
+      "aria-controls specifies which CSS stylesheet controls the element's presentation — misused on elements with inline styles",
+      "aria-controls links a form control to its submit button — commonly misused on non-form elements",
+    ],
+    correct: 1,
+    explanation:
+      "aria-controls references the ID of an element whose content or display is controlled by the current element. For example, a tab has aria-controls pointing to its tabpanel, and a combobox input has aria-controls pointing to its popup listbox. A common misuse is treating aria-controls as a navigation mechanism or substituting it for aria-owns — they are distinct: aria-owns changes the accessibility tree parent-child hierarchy, while aria-controls documents a functional control relationship without changing the tree structure. Support for aria-controls varies across AT implementations.",
+  },
+  {
+    id: 140,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What is aria-roledescription, and what is a good use case for it?",
+    options: [
+      "It replaces the element's role in the accessibility tree with a numeric code for programmatic processing",
+      "It provides a human-readable, author-defined string that overrides the AT's default role announcement — useful for customizing how a composite widget is announced",
+      "It is a tooltip-like description that appears visually when the element receives focus",
+      "It specifies which WAI-ARIA specification version defined the role being used",
+    ],
+    correct: 1,
+    explanation:
+      "aria-roledescription allows authors to replace the default role announcement with a custom human-readable string. For example, a custom carousel built with role=\"group\" might use aria-roledescription=\"slide\" so screen readers announce 'slide' instead of 'group'. It should be used only when the standard role name does not clearly communicate the widget's nature to users. Caution: overriding role names can confuse users who rely on consistent terminology, so it should only be used when the custom label is genuinely more descriptive than the standard ARIA role name.",
+  },
+  {
+    id: 141,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What is the purpose of aria-keyshortcuts, and how should authors use it?",
+    options: [
+      "It prevents screen reader shortcut keys from conflicting with application shortcuts by declaring which keys are in use",
+      "It documents keyboard shortcuts that can activate or move focus to the element, allowing assistive technologies to expose those shortcuts to users",
+      "It assigns a single-character shortcut key to activate the element, replacing the accesskey HTML attribute",
+      "It enables the browser to automatically intercept the specified keys and route them to the element",
+    ],
+    correct: 1,
+    explanation:
+      "aria-keyshortcuts communicates keyboard shortcuts associated with an element to assistive technologies so they can expose that information to users. For example, if pressing Alt+S activates a search button, setting aria-keyshortcuts=\"Alt+S\" on the button allows screen readers to announce the shortcut. The attribute is purely informational — it does not implement the shortcut; authors must separately handle the keypress event. WCAG SC 2.1.4 Character Key Shortcuts also requires that single-character shortcuts can be remapped or disabled.",
+  },
+  {
+    id: 142,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "In the WAI-ARIA specification, what are global states and properties?",
+    options: [
+      "States and properties that apply only to landmark roles, applying globally across the page",
+      "States and properties that are valid on any HTML element regardless of its role — such as aria-label, aria-describedby, aria-hidden, aria-live, and aria-disabled",
+      "Properties that must be defined at the document root (<html> element) to apply site-wide",
+      "States that are shared between all instances of the same role in a single application",
+    ],
+    correct: 1,
+    explanation:
+      "Global states and properties in WAI-ARIA can be applied to any element regardless of role. They include: aria-atomic, aria-busy, aria-controls, aria-current, aria-describedby, aria-details, aria-disabled, aria-dropeffect, aria-errormessage, aria-flowto, aria-grabbed, aria-haspopup, aria-hidden, aria-invalid, aria-keyshortcuts, aria-label, aria-labelledby, aria-live, aria-owns, aria-relevant, and aria-roledescription. In contrast, role-specific states and properties (like aria-checked, aria-expanded, or aria-valuenow) are only meaningful on elements with the appropriate roles.",
+  },
+  {
+    id: 143,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What does role=\"application\" communicate to assistive technologies, and when should it be used?",
+    options: [
+      "It marks the entire web page as an application, enabling enhanced keyboard shortcuts in all browsers",
+      "It signals that the region should be treated as a desktop application widget — AT switches to pass-through mode, forwarding all keystrokes directly to the element instead of using browse/virtual cursor commands",
+      "It disables all ARIA roles within the region, treating the entire area as a decorative zone",
+      "It is equivalent to role=\"main\" and simply marks the primary application content area",
+    ],
+    correct: 1,
+    explanation:
+      "role=\"application\" tells assistive technologies to switch from their standard document browsing mode (virtual cursor / browse mode) to a pass-through or application mode, where all keystrokes are sent directly to the web application rather than being interpreted as AT navigation commands. This is appropriate for highly interactive regions (like a custom code editor or complex widget) that require full keyboard control. It should be used with great caution and only on specific regions — applying it to a broad area strips users of all standard AT navigation shortcuts for that region.",
+  },
+  {
+    id: 144,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What is the purpose of aria-sort on column or row header cells, and what are its valid values?",
+    options: [
+      "It specifies the visual sort direction arrow displayed next to the header — values: up, down, both, none",
+      "It indicates the current sort state of the column or row — values: ascending, descending, other, none",
+      "It triggers automatic DOM resorting of table rows when changed — values: alpha, numeric, date, none",
+      "It marks headers as sortable so users can activate them — values: true, false",
+    ],
+    correct: 1,
+    explanation:
+      "aria-sort is used on elements with role=\"columnheader\" or role=\"rowheader\" (or native <th> elements) to indicate the current sort state of that column or row. Valid values are: \"ascending\" (sorted A–Z or lowest to highest), \"descending\" (sorted Z–A or highest to lowest), \"other\" (sorted by a different algorithm), and \"none\" (not currently sorted, though the column is sortable). Only one column header should have aria-sort set to ascending or descending at a time. This communicates sort state to screen reader users who cannot visually perceive directional sort arrows.",
+  },
+  {
+    id: 145,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What is the aria-autocomplete attribute used for, and what are its valid values on a combobox?",
+    options: [
+      "It enables browser-native autocomplete behavior — values: on, off",
+      "It describes the type of autocomplete assistance the combobox provides — values: none, inline, list, both",
+      "It specifies the data source for suggestions — values: api, local, mixed",
+      "It controls whether completed text is accepted on Enter or Tab — values: enter, tab, either",
+    ],
+    correct: 1,
+    explanation:
+      "aria-autocomplete describes how the combobox provides autocomplete assistance: \"none\" — no autocomplete; \"inline\" — the input value is automatically completed with the remaining text of the best match displayed inline after the cursor; \"list\" — a collection of values that could complete the current input is displayed; \"both\" — both inline and list assistance are provided. This attribute is informational — it tells AT what kind of assistance to expect, allowing screen readers to convey the behavior to users. It does not implement autocomplete; scripting must provide the actual behavior.",
+  },
+  {
+    id: 146,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "In WAI-ARIA, what does role=\"none\" (also called role=\"presentation\") do, and what is a critical rule about its use?",
+    options: [
+      "It hides the element from the DOM entirely, equivalent to display:none",
+      "It removes the element's semantic role from the accessibility tree, making it presentational; it must not be applied to focusable elements or elements with required owned elements",
+      "It marks the element as a presentation-layer component that is always visible regardless of CSS",
+      "It replaces the element's role with role=\"img\" for presentation purposes",
+    ],
+    correct: 1,
+    explanation:
+      "role=\"none\" (synonym: role=\"presentation\") removes the element's implicit ARIA role from the accessibility tree, making it invisible to AT in terms of semantics. This is useful for elements used purely for layout (e.g., a <table> used for visual layout, not data). Critical rule: it must not be applied to focusable elements or interactive elements — a <button role=\"none\"> creates a 'none' button that still receives focus, resulting in a confusing experience where users focus on an element with no announced role. The APG Rule 4 specifically prohibits role=\"none\" and aria-hidden=\"true\" on focusable elements.",
+  },
+  {
+    id: 147,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What is the aria-level attribute used for, and on which roles is it applicable?",
+    options: [
+      "It specifies the importance level of an ARIA live region announcement (1=highest priority)",
+      "It defines the hierarchical level of an element within a structure — applicable on heading, listitem, row, and treeitem roles",
+      "It sets the tab order priority within a composite widget (lower value = earlier tab stop)",
+      "It defines the nesting depth for landmark regions (1=outermost, increasing for nested regions)",
+    ],
+    correct: 1,
+    explanation:
+      "aria-level specifies the hierarchical level of an element within a structure and is applicable on the heading, listitem, row, and treeitem roles. For headings, it communicates the heading level when native <h1>–<h6> elements cannot be used (e.g., role=\"heading\" aria-level=\"2\" is equivalent to <h2>). For tree items, it indicates nesting depth. The value must be a positive integer. For native <h1>–<h6> elements, the level is determined by the element itself and aria-level is not needed.",
+  },
+  {
+    id: 148,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "What does the aria-relevant attribute control in a live region, and what are its valid values?",
+    options: [
+      "It filters which AT announcements are queued during live region updates — values: high, medium, low, off",
+      "It specifies which types of DOM changes trigger an announcement — values include additions, removals, text, and all",
+      "It controls the delay before an announcement is made — values: immediate, polite, deferred",
+      "It identifies which child elements are relevant to the live region's purpose — values: first, last, all",
+    ],
+    correct: 1,
+    explanation:
+      "aria-relevant specifies which types of changes to the live region should be announced by assistive technologies. Values are space-separated and can include: \"additions\" (new nodes added to the region), \"removals\" (nodes removed from the region), \"text\" (text content changes), and \"all\" (all changes). The default is \"additions text\". For example, a chat log might use aria-relevant=\"additions\" to only announce new messages, not when old messages scroll out of the DOM. \"removals\" is rarely used alone since removed content is generally not useful to announce.",
+  },
+  {
+    id: 149,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "According to WAI-ARIA, what is the second rule of ARIA use?",
+    options: [
+      "Do not use ARIA unless absolutely required — native HTML is always preferred",
+      "Do not change native semantics of host language elements unless you really have to (e.g., wrapping a heading in a tab rather than adding role=tab directly to the heading)",
+      "All ARIA roles must have a visible label provided by aria-label or aria-labelledby",
+      "ARIA states and properties must be kept in sync with the visual state of the component at all times",
+    ],
+    correct: 1,
+    explanation:
+      "The second rule of ARIA use (from the W3C 'Using ARIA' guidance) states: do not change native semantics unless you really have to. For example, if you want a heading that is also a tab, do not write <h2 role=\"tab\">. Instead, wrap the heading: <div role=\"tab\"><h2>heading tab</h2></div>. Changing the role of an element with strong native semantics (like a heading, button, or table) can break AT expectations built around those native semantics. Preserve native roles where possible and compose ARIA roles around them.",
+  },
+  {
+    id: 150,
+    category: "WAS Body of Knowledge · ARIA",
+    sc: "WAI-ARIA",
+    level: "Development",
+    question:
+      "According to WAI-ARIA, what is the third rule of ARIA use regarding interactive controls?",
+    options: [
+      "All interactive ARIA controls must use native HTML elements — custom widgets are prohibited",
+      "All interactive ARIA controls must be usable with the keyboard, because ARIA only provides semantics to the accessibility API — it does not add keyboard behavior",
+      "All interactive ARIA controls must have a visible focus indicator at least 2px wide",
+      "All interactive ARIA controls must have an aria-label or aria-labelledby — implicit names from content are not sufficient",
+    ],
+    correct: 1,
+    explanation:
+      "The third rule of ARIA use states: all interactive ARIA controls must be keyboard accessible. ARIA roles, states, and properties only communicate semantics to the accessibility API — they do not add keyboard event handling. Giving a <div> role=\"button\" tells AT it is a button, but the browser will not respond to Enter or Space on that div without scripted event listeners. Developers are responsible for implementing the full keyboard interaction pattern for every custom interactive widget, as described in the APG keyboard interaction specifications for each pattern.",
+  },
 ];
 
